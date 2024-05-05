@@ -239,10 +239,10 @@ local function os_capture(cmd, raw)
     local tagongit  = os_capture('git for-each-ref refs/tags --sort=-taggerdate --format="%(refname:short)" --count=1')
     local gitpush   = os_capture("git log --branches --not --remotes")
   
-    if gitbranch == "master" then
+    if gitbranch == "main" then
       os_message("** Checking git branch '"..gitbranch.."': OK")
     else
-      error("** Error!!: You must be on the 'master' branch")
+      error("** Error!!: You must be on the 'main' branch")
     end
     if gitstatus == "" then
       os_message("** Checking status of the files: OK")
