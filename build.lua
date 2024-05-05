@@ -231,7 +231,42 @@ local function os_capture(cmd, raw)
       s = string.gsub(s, '[\n\r]+', ' ')
     return s
   end
-
+  if options["target"] == "update" then
+    -- Capture output of git commands
+    local gitbranch = os_capture("git symbolic-ref --short HEAD")
+    local gitstatus = os_capture("git status --porcelain")
+    local tagongit  = os_capture('git for-each-ref refs/tags --sort=-taggerdate --format="%(refname:short)" --count=1')
+    local gitpush   = os_capture("git log --branches --not --remotes")
+  
+    if gitbranch == "main" then
+      os_message("** Checking git branch '"..gitbranch.."': OK")
+    else
+      error("** Error!!: You must be on the 'main' branch")
+    end
+    if gitstatus == "" then
+      os_message("** Checking status of the files: OK")
+    else
+      error("** Error!!: Files have been edited, please commit all changes")
+    end
+    if gitpush == "" then
+      os_message("** Checking pending commits: OK")
+    else
+      error("** Error!!: There are pending commits, please run git push")
+    end
+    check_marked_tags()
+  
+    local pkgversion = "v"..pkgversion
+    os_message("** Checking last tag marked in GitHub "..tagongit..": OK")
+    errorlevel = os.execute("git tag -a "..pkgversion.." -m 'Release "..pkgversion.." "..pkgdate.."'")
+    if errorlevel ~= 0 then
+      error("** Error!!: tag "..tagongit.." already exists, run git tag -d "..pkgversion.." && git push --delete origin "..pkgversion)
+      return errorlevel
+    else
+      os_message("** Running: git tag -a "..pkgversion.." -m 'Release "..pkgversion.." "..pkgdate.."'")
+    end
+    os_message("** Running: git push --tags --quiet")
+    os.execute("git push --tags --quiet")
+    --[[ 
   if options["target"] == "release" then
     -- Capture output of git commands
     local gitbranch = os_capture("git symbolic-ref --short HEAD")
@@ -277,5 +312,6 @@ local function os_capture(cmd, raw)
     os.execute("l3build upload -F ctan.ann --debug >"..os_null)
     print("** Now check "..ctanzip..".curlopt file and add changes to ctan.ann")
     print("** If everything is OK run (manually): l3build upload -F ctan.ann")
+    ]]--
     os.exit(0)
   end
