@@ -12,7 +12,7 @@ maindir       = "."
 sourcefiledir = "./sources"
 textfiledir   = "./sources"
 textfiles     = {textfiledir.."/CTANREADME.md"}
-sourcefiles   = {"MagTex.dtx"}
+sourcefiles   = {"*.dtx", "*.ins"}
 installfiles  = {"MagTex.pdf", "MagTex.sty", "example.tex", "example.pdf"}
 tdslocations  = {
   "source/latex/MagTex/MagTex.dtx",

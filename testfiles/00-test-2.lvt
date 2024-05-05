@@ -1,0 +1,17 @@
+\input{regression-test} 
+\documentclass{article} 
+  \usepackage{MagTex} 
+  
+  \begin{document}
+  
+  \START
+  
+  \ExplSyntaxOn
+  
+  \OMIT
+  \hbox_set:Nn \l_tmpa_box { 24 } 
+  \TIMO
+  
+  \box_show:N \l_tmpa_box 
+  
+  \END

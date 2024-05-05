@@ -162,6 +162,14 @@ Example of use \verb|MagTex| \examplemacro{mandatory} and
   Some code here, probably
 }
 %    \end{macrocode}
+%
+%    \begin{macrocode}
+\NewDocumentCommand \DoubleIt { m }
+{
+  \typeout{#1}
+  \tl_map_inline:nn {#1} { ##1 ##1 }
+}
+%    \end{macrocode}
 % \end{macro}
 %
 %    \begin{macrocode}
